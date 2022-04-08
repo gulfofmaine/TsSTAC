@@ -1,0 +1,15 @@
+{
+  "id": "039",
+  "stac_version": "0.6.0",
+  "description": "eo:row catalog",
+  "links": [
+    {
+      "rel": "self",
+      "href": "https://landsat-stac.s3.amazonaws.com/landsat-8-l1/026/039/catalog.json"
+    },
+    { "rel": "root", "href": "../../../catalog.json" },
+    { "rel": "parent", "href": "../catalog.json" },
+    { "rel": "item", "href": "2015-01-02/LC80260392015002LGN00.json" },
+    { "rel": "item", "href": "2015-01-18/LC80260392015018LGN00.json" }
+  ]
+}

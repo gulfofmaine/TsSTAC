@@ -1,0 +1,14 @@
+{
+  "id": "026",
+  "stac_version": "0.6.0",
+  "description": "eo:column catalog",
+  "links": [
+    {
+      "rel": "self",
+      "href": "https://landsat-stac.s3.amazonaws.com/landsat-8-l1/026/catalog.json"
+    },
+    { "rel": "root", "href": "../../catalog.json" },
+    { "rel": "parent", "href": "../catalog.json" },
+    { "rel": "child", "href": "039/catalog.json" }
+  ]
+}
