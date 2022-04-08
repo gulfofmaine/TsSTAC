@@ -30,8 +30,12 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "tsstac",
+  "name": "@gulfofmaine/tsstac",
   "author": "Alex Kerney",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gulfofmaine/TsSTAC"
+  },
   "module": "dist/tsstac.esm.js",
   "size-limit": [
     {
