@@ -1,30 +1,43 @@
-import { ICatalog, ICatalogData, ICollection, ISTAC } from './types'
-import { Link } from './link'
+import {
+  ICatalog,
+  ICollection,
+  ISTAC,
+  ICollectionData,
+  IAssetData,
+} from './types'
 import { CatalogCollectionCommon } from './collection_catalog_common'
+import { Link } from './link'
 
-export class Catalog extends CatalogCollectionCommon implements ICatalog {
-  type = 'Catalog' as const
+export class Collection extends CatalogCollectionCommon implements ICollection {
+  type = 'Collection' as const
   stac_version: string
   stac_extensions: string[]
   id: string
   title?: string | undefined
   description: string
   links: Link[]
+  keywords: string[]
+  license: string
+  providers: object[]
+  extent: object
+  summaries: { [key: string]: object }
+  assets: { [key: string]: IAssetData }
   extra_fields?: { [key: string]: any }
 
-  store?: ISTAC
-  self_href?: string
+  store?: ISTAC | undefined
+  self_href?: string | undefined
   parent?: ICatalog | ICollection
   root?: ICatalog
 
   constructor(
-    catalog_obj: ICatalogData & {
+    collection_obj: ICollectionData & {
       store?: ISTAC
       self_href?: string
       root?: ICatalog
       parent?: ICatalog | ICollection
     } & object
   ) {
+    super()
     const {
       stac_version,
       stac_extensions,
@@ -34,11 +47,17 @@ export class Catalog extends CatalogCollectionCommon implements ICatalog {
       links,
       store,
       self_href,
+      keywords,
+      license,
+      providers,
+      extent,
+      summaries,
+      assets,
       root,
       parent,
       ...extra
-    } = catalog_obj
-    super()
+    } = collection_obj
+
     this.stac_version = stac_version
     this.stac_extensions = stac_extensions ?? []
     this.id = id
@@ -47,8 +66,14 @@ export class Catalog extends CatalogCollectionCommon implements ICatalog {
     this.links = links.map(l => new Link(l))
     this.store = store
     this.self_href = self_href
+    this.keywords = keywords ?? []
+    this.license = license
+    this.providers = providers
+    this.extent = extent
+    this.summaries = summaries ?? {}
+    this.assets = assets ?? {}
+    this.extra_fields = extra
     this.root = root
     this.parent = parent
-    this.extra_fields = extra
   }
 }

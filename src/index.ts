@@ -1,1 +1,1 @@
-export { STAC as default } from './stac_store';
+export { STAC as default } from './stac_store'

@@ -1,9 +1,19 @@
-import { ICatalog, IFetchFn, ISTAC, IStoreChild, IStoreChilden } from './types';
+import {
+  ICatalog,
+  ICatalogCollection,
+  ICatalogData,
+  ICollectionData,
+  IFetchFn,
+  ISTAC,
+  IStoreChild,
+  IStoreChilden,
+} from './types'
 
-import { Catalog } from './catalog';
+import { Catalog } from './catalog'
+import { Collection } from './collection'
 
 export class STAC implements ISTAC {
-  private children: IStoreChilden = {};
+  private children: IStoreChilden = {}
 
   constructor(public fetcher: IFetchFn) {}
 
@@ -13,14 +23,38 @@ export class STAC implements ISTAC {
    * @param url
    * @returns
    */
-  async load(url: string): Promise<IStoreChild> {
-    const item = await this.fetcher(url);
-    item.store = this;
-    item.self_href = url;
+  async load(
+    url: string,
+    rel?: {
+      parent?: ICatalogCollection
+      root?: ICatalog
+    }
+  ): Promise<IStoreChild> {
+    const result = await this.fetcher(url)
+    let data: IStoreChild
 
-    this.children[url] = item;
+    // if ('geometry' in result) {
+    // Must be an item
+    // } else
+    if ('license' in result) {
+      data = new Collection(result as ICollectionData)
+    } else {
+      data = new Catalog(result as ICatalogData)
+    }
 
-    return item;
+    data.store = this
+    data.self_href = url
+
+    if (rel?.parent) {
+      data.parent = rel.parent
+    }
+    if (rel?.root) {
+      data.root = rel.root
+    }
+
+    this.children[url] = data
+
+    return data
   }
 
   /**
@@ -28,19 +62,27 @@ export class STAC implements ISTAC {
    * @param url
    * @returns
    */
-  async get(url: string): Promise<IStoreChild> {
+  async get(
+    url: string,
+    rel?: {
+      parent?: ICatalogCollection
+      root?: ICatalog
+    }
+  ): Promise<IStoreChild> {
     if (url in this.children) {
-      return this.children[url];
+      return this.children[url]
     }
 
-    return this.load(url);
+    return this.load(url, rel)
   }
 
-  async get_catalog(url: string, walk: boolean = true): Promise<Catalog> {
-    const catalog = new Catalog((await this.get(url)) as ICatalog);
+  async get_root_catalog(url: string, walk: boolean = false): Promise<Catalog> {
+    const catalog = (await this.get(url)) as Catalog
+    catalog.root = catalog
+    this.children[url] = catalog
 
-    console.log(walk);
+    console.log(walk)
 
-    return catalog;
+    return catalog
   }
 }

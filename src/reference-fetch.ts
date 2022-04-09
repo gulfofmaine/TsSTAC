@@ -1,4 +1,7 @@
-import { IFetchFn, ISTACObject } from './types';
+import {
+  IFetchFn,
+  // , ISTACObject
+} from './types'
 
 /**
  * Load JSON STAC objects from URL using browser fetch
@@ -7,8 +10,8 @@ import { IFetchFn, ISTACObject } from './types';
  * @returns STAC object
  */
 export const fetcher: IFetchFn = async (url: string) => {
-  const result = await fetch(url);
-  const data = (await result.json()) as ISTACObject;
+  const result = await fetch(url)
+  const data = await result.json()
 
-  return data;
-};
+  return data
+}
