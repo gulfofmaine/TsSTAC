@@ -47,4 +47,6 @@ export abstract class STACObject implements ISTACObject {
 
     return new URL(href, this.self_href).href
   }
+
+  abstract describe(depth: number, spaces: string): Promise<string>
 }
