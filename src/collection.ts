@@ -38,6 +38,7 @@ export class Collection extends CatalogCollectionCommon implements ICollection {
     } & object
   ) {
     super()
+
     const {
       stac_version,
       stac_extensions,

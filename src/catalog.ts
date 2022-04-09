@@ -25,6 +25,8 @@ export class Catalog extends CatalogCollectionCommon implements ICatalog {
       parent?: ICatalog | ICollection
     } & object
   ) {
+    super()
+
     const {
       stac_version,
       stac_extensions,
@@ -38,7 +40,7 @@ export class Catalog extends CatalogCollectionCommon implements ICatalog {
       parent,
       ...extra
     } = catalog_obj
-    super()
+
     this.stac_version = stac_version
     this.stac_extensions = stac_extensions ?? []
     this.id = id
