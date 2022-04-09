@@ -77,4 +77,17 @@ export class Collection extends CatalogCollectionCommon implements ICollection {
     this.root = root
     this.parent = parent
   }
+
+  async describe(depth: number, spaces: string = ''): Promise<string> {
+    let result = `${spaces}* <Collection ${this.id}>`
+
+    if (depth !== 0) {
+      const children = await this.get_children()
+      for (const child of children) {
+        result += '\n' + (await child.describe(depth - 1, spaces + '  '))
+      }
+    }
+
+    return result
+  }
 }

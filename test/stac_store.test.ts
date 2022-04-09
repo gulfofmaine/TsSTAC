@@ -4,6 +4,7 @@ import { fetcher } from '../src/reference-fetch'
 import { STAC } from '../src/stac_store'
 import { Collection } from '../src/collection'
 import { catalogUrl, mockLandsatCatalog, landsatUrls } from './mock_landsat'
+// import { Catalog } from '../src/catalog'
 
 describe('STAC Store', () => {
   beforeEach(() => {
@@ -96,4 +97,47 @@ describe('STAC Store', () => {
       landsatUrls['landsat-8-l1']['026']['catalog.json']
     )
   })
+
+  it('Can recursively load a catalog', async () => {
+    const stac = new STAC(fetcher)
+    const catalog = await stac.get_root_catalog(catalogUrl)
+
+    await catalog.recursive_load(2)
+
+    expect(fetch).toHaveBeenCalledTimes(4)
+    expect(fetch).toHaveBeenCalledWith(catalogUrl)
+    expect(fetch).toHaveBeenCalledWith(
+      landsatUrls['landsat-8-l1']['catalog.json']
+    )
+    expect(fetch).toHaveBeenCalledWith(
+      landsatUrls['landsat-8-l1']['010']['catalog.json']
+    )
+    expect(fetch).toHaveBeenCalledWith(
+      landsatUrls['landsat-8-l1']['026']['catalog.json']
+    )
+  })
+
+  it('Can describe a tree', async () => {
+    const stac = new STAC(fetcher)
+    const catalog = await stac.get_root_catalog(catalogUrl)
+
+    const description = await catalog.describe(-1)
+
+    expect(description).toContain('* <Catalog landsat-stac>')
+    expect(description).toContain('  * <Collection landsat-8-l1>')
+    expect(description).toContain('    * <Catalog 010>')
+    expect(description).toContain('      * <Catalog 117>')
+    expect(description).toContain('      * <Catalog 120>')
+    expect(description).toContain('    * <Catalog 026>')
+    expect(description).toContain('      * <Catalog 039>')
+  })
+
+  // it('Can load a collection and items', async () => {
+  //   const stac = new STAC(fetcher)
+  //   const row_catalog = (stac.get(
+  //     landsatUrls['landsat-8-l1']['026']['039']['catalog.json']
+  //   ) as unknown) as Catalog
+
+  //   expect(row_catalog.get_item_links()).toHaveLength(2)
+  // })
 })

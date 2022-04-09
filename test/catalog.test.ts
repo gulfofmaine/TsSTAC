@@ -43,6 +43,14 @@ describe('Catalog', () => {
       'There is no store configured, cannot load children'
     )
   })
+
+  it('Can be described', async () => {
+    const catalog = new Catalog(catalogData)
+
+    const description = await catalog.describe(0)
+
+    expect(description).toEqual('* <Catalog landsat-stac>')
+  })
 })
 
 const catalogData = require('./test_data/catalog.json')

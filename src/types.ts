@@ -26,6 +26,25 @@ export interface ISTACObject extends ISTACObjectBase {
   self_href?: string
   parent?: ICatalogCollection
   root?: ICatalog
+
+  /**
+   * Filter links to those that contain children catalogs and collections
+   */
+  get_child_links(): ILink[]
+
+  /**
+   * Filter links to those that contain items
+   */
+  get_item_links(): ILink[]
+
+  /**
+   * Return a string description of the STAC tree to a given depth
+   * below current object.
+   * @param depth Depth to traverse below current object when generating tree,
+   * -1 will go till the tree is exhausted
+   * @param spaces Number of spaces to pad tree with, usually used for recursing.
+   */
+  describe(depth: number, spaces: string): Promise<string>
 }
 
 export interface ICatalogData {
@@ -70,13 +89,16 @@ export interface ICatalogCollection extends ISTACObject {
    */
   get_children(): Promise<(ICatalog | ICollection)[]>
 
-  // store?: ISTAC
-  // self_href?: string
-  //   get_child_links(): ILink[];
-  //   get_item_links(): ILink[];
-  //   get_child(id: string, recursive: boolean): Promise<ICatalogCollection>;
-  //   get_item(id: string, recursive: boolean): Promise<IItem>;
-  //   describe(depth: number, walk: boolean): Promise<string>;
+  /**
+   * Return the items by loading if necessary
+   */
+  get_items(): Promise<IItem[]>
+
+  /**
+   * Recursively load the catalog or collection until a given depth
+   * @param depth -1 will load the entire catalog, 1 will just load the children
+   */
+  recursive_load(depth: number): Promise<void>
 }
 
 export interface ICatalog extends ICatalogCollection {
@@ -97,17 +119,39 @@ export interface ICollection extends ICatalogCollection {
 export interface IItem extends ISTACObject {
   type: 'Feature'
   collection?: string
-  geometry: object | null
+  geometry?: {
+    type: string
+    coordinates: number[][]
+  }
   bbox?: number[]
   assets: { [key: string]: object }
+  extra_fields?: { [key: string]: any }
 
-  get_collection(): Promise<ICollection>
+  // get_collection(): Promise<ICollection | ICatalog>
+}
 
-  //   describe(depth: number, walk: boolean): Promise<string>;
+export interface IItemData {
+  id: string
+  stac_version: string
+  title?: string
+  description: string
+  stac_extensions?: string[]
+  type: string
+  bbox?: number[]
+  geometry?: {
+    type: string
+    coordinates: number[][]
+  }
+  properties: {}
+  assets: {
+    [key: string]: IAssetData
+  }
+  links: ILink[]
+  collection?: string
 }
 
 // export type IStoreChild = ISTACObject;
-export type IStoreChild = ICatalog | ICollection
+export type IStoreChild = ICatalog | ICollection | IItem
 // | ICollection | IItem
 
 export interface IStoreChilden {

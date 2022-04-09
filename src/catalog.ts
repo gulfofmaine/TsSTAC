@@ -53,4 +53,17 @@ export class Catalog extends CatalogCollectionCommon implements ICatalog {
     this.parent = parent
     this.extra_fields = extra
   }
+
+  async describe(depth: number, spaces: string = ''): Promise<string> {
+    let result = `${spaces}* <Catalog ${this.id}>`
+
+    if (depth !== 0) {
+      const children = await this.get_children()
+      for (const child of children) {
+        result += '\n' + (await child.describe(depth - 1, spaces + '  '))
+      }
+    }
+
+    return result
+  }
 }
