@@ -30,7 +30,7 @@ export abstract class CatalogCollectionCommon extends STACObject
     return children
   }
 
-  async get_items(): Promise<IItem[]> {
+  get_items = async (): Promise<IItem[]> => {
     if (!this.store) {
       throw new Error('There is no store configured, cannot load items')
     }

@@ -62,6 +62,11 @@ export class Catalog extends CatalogCollectionCommon implements ICatalog {
       for (const child of children) {
         result += '\n' + (await child.describe(depth - 1, spaces + '  '))
       }
+
+      const items = await this.get_items()
+      for (const item of items) {
+        result += '\n' + (await item.describe(depth - 1, spaces + ' '))
+      }
     }
 
     return result

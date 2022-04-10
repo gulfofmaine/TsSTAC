@@ -4,6 +4,7 @@ import {
   ICatalogData,
   ICollectionData,
   IFetchFn,
+  IItemData,
   ISTAC,
   IStoreChild,
   IStoreChilden,
@@ -11,6 +12,7 @@ import {
 
 import { Catalog } from './catalog'
 import { Collection } from './collection'
+import { Item } from './item'
 
 export class STAC implements ISTAC {
   private children: IStoreChilden = {}
@@ -33,10 +35,9 @@ export class STAC implements ISTAC {
     const result = await this.fetcher(url)
     let data: IStoreChild
 
-    // if ('geometry' in result) {
-    // Must be an item
-    // } else
-    if ('license' in result) {
+    if ('geometry' in result) {
+      data = new Item(result as IItemData)
+    } else if ('license' in result) {
       data = new Collection(result as ICollectionData)
     } else {
       data = new Catalog(result as ICatalogData)

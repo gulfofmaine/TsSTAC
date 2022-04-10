@@ -84,6 +84,11 @@ const urlData = {
   ]]: JSON.stringify(
     require('./test_data/landsat-8-l1/010/120/2015-01-02/LC80101202015002LGN00.json')
   ),
+  [landsatUrls['landsat-8-l1']['010']['120']['2021-02-03'][
+    'LC80101202021034.json'
+  ]]: JSON.stringify(
+    require('./test_data/landsat-8-l1/010/120/2021-02-03/LC80101202021034.json')
+  ),
 
   [landsatUrls['landsat-8-l1']['026']['catalog.json']]: JSON.stringify(
     require('./test_data/landsat-8-l1/026/catalog.json')

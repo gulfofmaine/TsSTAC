@@ -127,9 +127,36 @@ describe('STAC Store', () => {
     expect(description).toContain('  * <Collection landsat-8-l1>')
     expect(description).toContain('    * <Catalog 010>')
     expect(description).toContain('      * <Catalog 117>')
+    expect(description).toContain('       * <Item LC80101172015002LGN00>')
+    expect(description).toContain('       * <Item LC80101172015018LGN00>')
     expect(description).toContain('      * <Catalog 120>')
+    expect(description).toContain('       * <Item LC80101202015002LGN00>')
+    expect(description).toContain('       * <Item LC80101202021034>')
     expect(description).toContain('    * <Catalog 026>')
     expect(description).toContain('      * <Catalog 039>')
+    expect(description).toContain('       * <Item LC80260392015002LGN00>')
+    expect(description).toContain('       * <Item LC80260392015018LGN00>')
+  })
+
+  it('Can description will be limited by depth', async () => {
+    const stac = new STAC(fetcher)
+    const catalog = await stac.get_root_catalog(catalogUrl)
+
+    const description = await catalog.describe(3)
+
+    expect(description).toContain('* <Catalog landsat-stac>')
+    expect(description).toContain('  * <Collection landsat-8-l1>')
+    expect(description).toContain('    * <Catalog 010>')
+    expect(description).toContain('      * <Catalog 117>')
+    expect(description).not.toContain('       * <Item LC80101172015002LGN00>')
+    expect(description).not.toContain('       * <Item LC80101172015018LGN00>')
+    expect(description).toContain('      * <Catalog 120>')
+    expect(description).not.toContain('       * <Item LC80101202015002LGN00>')
+    expect(description).not.toContain('       * <Item LC80101202021034>')
+    expect(description).toContain('    * <Catalog 026>')
+    expect(description).toContain('      * <Catalog 039>')
+    expect(description).not.toContain('       * <Item LC80260392015002LGN00>')
+    expect(description).not.toContain('       * <Item LC80260392015018LGN00>')
   })
 
   // it('Can load a collection and items', async () => {

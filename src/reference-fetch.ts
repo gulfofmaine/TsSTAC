@@ -10,8 +10,15 @@ import {
  * @returns STAC object
  */
 export const fetcher: IFetchFn = async (url: string) => {
-  const result = await fetch(url)
-  const data = await result.json()
-
-  return data
+  try {
+    const result = await fetch(url)
+    try {
+      const data = await result.json()
+      return data
+    } catch (e) {
+      throw new Error(`Error converting ${url} to JSON ${e}`)
+    }
+  } catch (e) {
+    throw new Error(`Error loading ${url} ${e}`)
+  }
 }
