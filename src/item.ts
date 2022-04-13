@@ -1,3 +1,4 @@
+import { Asset } from './asset'
 import { Link } from './link'
 import { STACObject } from './stac_object'
 import { IItem, IItemData, ISTAC, ICatalog, ICollection } from './types'
@@ -14,7 +15,7 @@ export class Item extends STACObject implements IItem {
     type: string
     coordinates: number[][]
   }
-  assets: { [key: string]: object }
+  assets: { [key: string]: Asset }
   bbox?: number[] | undefined
   collection?: string | undefined
 
@@ -61,7 +62,12 @@ export class Item extends STACObject implements IItem {
     this.id = id
     this.links = links.map(l => new Link(l))
     this.geometry = geometry
-    this.assets = assets
+    this.assets = {}
+
+    Object.entries(assets).forEach(([key, value]) => {
+      this.assets[key] = new Asset(value)
+    })
+
     this.bbox = bbox
     this.collection = collection
     this.store = store

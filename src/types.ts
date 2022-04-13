@@ -81,6 +81,11 @@ export interface IAssetData {
   roles?: string[]
 }
 
+export interface IAsset extends IAssetData {
+  roles: string[]
+  extra_fields?: { [key: string]: any }
+}
+
 export interface ICatalogCollection extends ISTACObject {
   description: string
 
@@ -113,7 +118,7 @@ export interface ICollection extends ICatalogCollection {
   extent: object
   summaries: { [key: string]: object }
   links: ILink[]
-  assets: { [key: string]: IAssetData }
+  assets: { [key: string]: IAsset }
 }
 
 export interface IItem extends ISTACObject {
@@ -124,7 +129,7 @@ export interface IItem extends ISTACObject {
     coordinates: number[][]
   }
   bbox?: number[]
-  assets: { [key: string]: object }
+  assets: { [key: string]: IAsset }
   extra_fields?: { [key: string]: any }
 
   // get_collection(): Promise<ICollection | ICatalog>

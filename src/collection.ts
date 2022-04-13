@@ -1,12 +1,7 @@
-import {
-  ICatalog,
-  ICollection,
-  ISTAC,
-  ICollectionData,
-  IAssetData,
-} from './types'
+import { ICatalog, ICollection, ISTAC, ICollectionData } from './types'
 import { CatalogCollectionCommon } from './collection_catalog_common'
 import { Link } from './link'
+import { Asset } from './asset'
 
 export class Collection extends CatalogCollectionCommon implements ICollection {
   type = 'Collection' as const
@@ -21,7 +16,7 @@ export class Collection extends CatalogCollectionCommon implements ICollection {
   providers: object[]
   extent: object
   summaries: { [key: string]: object }
-  assets: { [key: string]: IAssetData }
+  assets: { [key: string]: Asset }
   extra_fields?: { [key: string]: any }
 
   store?: ISTAC | undefined
@@ -72,7 +67,12 @@ export class Collection extends CatalogCollectionCommon implements ICollection {
     this.providers = providers
     this.extent = extent
     this.summaries = summaries ?? {}
-    this.assets = assets ?? {}
+    this.assets = {}
+
+    Object.entries(assets ?? {}).forEach(([key, value]) => {
+      this.assets[key] = new Asset(value)
+    })
+
     this.extra_fields = extra
     this.root = root
     this.parent = parent
