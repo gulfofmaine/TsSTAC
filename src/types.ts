@@ -1,3 +1,5 @@
+import { BBox, Feature, Polygon } from 'geojson'
+
 export interface IFetchFn {
   (url: string): Promise<IFetchData>
 }
@@ -121,14 +123,10 @@ export interface ICollection extends ICatalogCollection {
   assets: { [key: string]: IAsset }
 }
 
-export interface IItem extends ISTACObject {
+export interface IItem extends ISTACObject, Feature<Polygon> {
+  id: string
   type: 'Feature'
   collection?: string
-  geometry?: {
-    type: string
-    coordinates: number[][]
-  }
-  bbox?: number[]
   assets: { [key: string]: IAsset }
   extra_fields?: { [key: string]: any }
 
@@ -142,10 +140,10 @@ export interface IItemData {
   description: string
   stac_extensions?: string[]
   type: string
-  bbox?: number[]
-  geometry?: {
-    type: string
-    coordinates: number[][]
+  bbox?: BBox
+  geometry: {
+    type: 'Polygon'
+    coordinates: number[][][]
   }
   properties: {}
   assets: {
