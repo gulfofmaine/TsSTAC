@@ -1,3 +1,5 @@
+import { BBox, GeoJsonProperties, Position } from 'geojson'
+
 import { Asset } from './asset'
 import { Link } from './link'
 import { STACObject } from './stac_object'
@@ -11,13 +13,14 @@ export class Item extends STACObject implements IItem {
   description?: string | undefined
   id: string
   links: Link[]
-  geometry?: {
-    type: string
-    coordinates: number[][]
+  geometry: {
+    type: 'Polygon'
+    coordinates: Position[][]
   }
   assets: { [key: string]: Asset }
-  bbox?: number[] | undefined
+  bbox?: BBox
   collection?: string | undefined
+  properties: GeoJsonProperties
 
   extra_fields?: { [key: string]: any }
 
@@ -51,6 +54,7 @@ export class Item extends STACObject implements IItem {
       self_href,
       parent,
       root,
+      properties,
 
       ...extra
     } = item_obj
@@ -70,10 +74,12 @@ export class Item extends STACObject implements IItem {
 
     this.bbox = bbox
     this.collection = collection
+    this.properties = properties
     this.store = store
     this.self_href = self_href
     this.parent = parent
     this.root = root
+
     this.extra_fields = extra
   }
 

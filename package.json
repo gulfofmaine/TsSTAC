@@ -49,6 +49,7 @@
   ],
   "devDependencies": {
     "@size-limit/preset-small-lib": "^7.0.8",
+    "@types/geojson": "^7946.0.8",
     "husky": "^7.0.4",
     "jest-fetch-mock": "^3.0.3",
     "size-limit": "^7.0.8",
