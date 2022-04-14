@@ -96,10 +96,26 @@ export interface ICatalogCollection extends ISTACObject {
    */
   get_children(): Promise<(ICatalog | ICollection)[]>
 
+  // /**
+  //  * Get a specific catalog or collection by ID
+  //  *
+  //  * @param id ID of child collection or catalog to return
+  //  * @param depth Maximum depth to search, -1 will search full depth
+  //  */
+  get_child(id: string, depth: number): Promise<ICatalog | ICollection>
+
   /**
    * Return the items by loading if necessary
    */
   get_items(): Promise<IItem[]>
+
+  /**
+   * Find a specific item by ID
+   *
+   * @param id Item ID
+   * @param depth Maximum depth to search, -1 will search all children of the catalog/collection until found
+   */
+  get_item(id: string, depth: number): Promise<IItem>
 
   /**
    * Recursively load the catalog or collection until a given depth
