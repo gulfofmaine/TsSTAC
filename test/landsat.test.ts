@@ -6,7 +6,7 @@ import { Collection } from '../src/collection'
 import { catalogUrl, mockLandsatCatalog, landsatUrls } from './mock_landsat'
 // import { Catalog } from '../src/catalog'
 
-describe('STAC Store', () => {
+describe('Landsat Catalog', () => {
   beforeEach(() => {
     fetchMock.resetMocks()
     mockLandsatCatalog()
@@ -157,6 +157,75 @@ describe('STAC Store', () => {
     expect(description).toContain('      * <Catalog 039>')
     expect(description).not.toContain('       * <Item LC80260392015002LGN00>')
     expect(description).not.toContain('       * <Item LC80260392015018LGN00>')
+  })
+
+  it('Can find an item by ID', async () => {
+    const stac = new STAC(fetcher)
+    const catalog = await stac.get_root_catalog(catalogUrl)
+
+    const id = 'LC80101202015002LGN00'
+    const item = await catalog.get_item(id)
+
+    expect(item.id).toEqual(id)
+
+    const id2 = 'LC80260392015018LGN00'
+    const item2 = await catalog.get_item(id2)
+
+    expect(item2.id).toEqual(id2)
+  })
+
+  it("Can't get an item when the depth is limited", async () => {
+    const stac = new STAC(fetcher)
+    const catalog = await stac.get_root_catalog(catalogUrl)
+
+    const id = 'LC80101202015002LGN00'
+
+    await expect(catalog.get_item(id, 1)).rejects.toThrowError(
+      "Couldn't find item"
+    )
+  })
+
+  it("Can't get and item that does not exist", async () => {
+    const stac = new STAC(fetcher)
+    const catalog = await stac.get_root_catalog(catalogUrl)
+
+    const badId = 'does-not-exist'
+
+    await expect(catalog.get_item(badId)).rejects.toThrowError(
+      "Couldn't find item"
+    )
+  })
+
+  it('Can get a child by ID', async () => {
+    const stac = new STAC(fetcher)
+    const catalog = await stac.get_root_catalog(catalogUrl)
+
+    const id = '039'
+    const child = await catalog.get_child(id)
+
+    expect(child.id).toEqual(id)
+  })
+
+  it('Cannot get a child whe the depth is limited', async () => {
+    const stac = new STAC(fetcher)
+    const catalog = await stac.get_root_catalog(catalogUrl)
+
+    const id = '039'
+
+    await expect(catalog.get_child(id, 1)).rejects.toThrowError(
+      "Couldn't find child"
+    )
+  })
+
+  it('Cannot get a child that does not exist', async () => {
+    const stac = new STAC(fetcher)
+    const catalog = await stac.get_root_catalog(catalogUrl)
+
+    const badId = 'does-not-exist'
+
+    await expect(catalog.get_child(badId)).rejects.toThrowError(
+      "Couldn't find child"
+    )
   })
 
   // it('Can load a collection and items', async () => {
