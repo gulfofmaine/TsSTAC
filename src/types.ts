@@ -4,7 +4,7 @@ export interface IFetchFn {
   (url: string): Promise<IFetchData>
 }
 
-export type IFetchData = ICatalogData | ICollectionData
+export type IFetchData = ICatalogData | ICollectionData | IItemData
 
 export interface ILink {
   href: string

@@ -6,3 +6,4 @@ export * from './item'
 export * from './link'
 export * from './types'
 export * from './asset'
+export * as extensions from "./extensions"
