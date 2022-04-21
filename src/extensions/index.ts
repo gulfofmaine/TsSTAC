@@ -1,1 +1,3 @@
-export * as datacube from "./datacube"
+import * as datacube from './datacube'
+
+export { datacube }
