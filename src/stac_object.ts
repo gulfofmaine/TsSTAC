@@ -18,7 +18,7 @@ export abstract class STACObject implements ISTACObject {
    * @returns Children Catalog and Collection links
    */
   get_child_links(): Link[] {
-    return this.links.filter(l => l.rel === 'child')
+    return this.links.filter((l) => l.rel === 'child')
   }
 
   /**
@@ -26,7 +26,7 @@ export abstract class STACObject implements ISTACObject {
    * @returns Children Item links
    */
   get_item_links(): Link[] {
-    return this.links.filter(l => l.rel === 'item')
+    return this.links.filter((l) => l.rel === 'item')
   }
 
   /**
