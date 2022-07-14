@@ -46,7 +46,7 @@ export class Catalog extends CatalogCollectionCommon implements ICatalog {
     this.id = id
     this.title = title
     this.description = description
-    this.links = links.map(l => new Link(l))
+    this.links = links.map((l) => new Link(l))
     this.store = store
     this.self_href = self_href
     this.root = root

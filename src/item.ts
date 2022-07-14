@@ -64,7 +64,7 @@ export class Item extends STACObject implements IItem {
     this.title = title
     this.description = description
     this.id = id
-    this.links = links.map(l => new Link(l))
+    this.links = links.map((l) => new Link(l))
     this.geometry = geometry
     this.assets = {}
 

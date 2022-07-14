@@ -119,7 +119,7 @@ export function mockLandsatCatalog() {
   // If a URL matches the start of the landsat S3 url, then mock it
   fetchMock.mockIf(
     /^http?s:\/\/landsat-stac.s3.amazonaws.com.*$/,
-    async req => {
+    async (req) => {
       // If the url is a key in the urlData object, return the data from storage
       if (req.url in urlData) {
         return urlData[req.url]
