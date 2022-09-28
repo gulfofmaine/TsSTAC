@@ -22,7 +22,7 @@ describe('Collection', () => {
     collection.self_href =
       'https://landsat-stac.s3.amazonaws.com/landsat-8-l1/catalog.json'
 
-    const child_urls = children_links.map(l => collection.url_for_link(l))
+    const child_urls = children_links.map((l) => collection.url_for_link(l))
 
     expect(child_urls).toContainEqual(
       'https://landsat-stac.s3.amazonaws.com/landsat-8-l1/010/catalog.json'

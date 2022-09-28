@@ -1,10 +1,10 @@
-import { BBox, Feature, Polygon } from 'geojson'
+import { BBox, Feature, GeoJsonProperties, Polygon } from 'geojson'
 
 export interface IFetchFn {
   (url: string): Promise<IFetchData>
 }
 
-export type IFetchData = ICatalogData | ICollectionData
+export type IFetchData = ICatalogData | ICollectionData | IItemData
 
 export interface ILink {
   href: string
@@ -145,6 +145,7 @@ export interface IItem extends ISTACObject, Feature<Polygon> {
   collection?: string
   assets: { [key: string]: IAsset }
   extra_fields?: { [key: string]: any }
+  properties: GeoJsonProperties
 
   // get_collection(): Promise<ICollection | ICatalog>
 }
