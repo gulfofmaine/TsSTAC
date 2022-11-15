@@ -47,6 +47,13 @@ export interface ISTACObject extends ISTACObjectBase {
    * @param spaces Number of spaces to pad tree with, usually used for recursing.
    */
   describe(depth: number, spaces: string): Promise<string>
+
+  /**
+   * Returns the absolute URL for a child link, even if it is relative
+   * @param link A child link
+   * @returns
+   */
+  url_for_link(link: ILink): string
 }
 
 export interface ICatalogData {
